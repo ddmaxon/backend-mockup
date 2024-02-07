@@ -59,9 +59,9 @@ app.MapGet("/csv/search/substring/{substring}", (string substring) =>
 });
 app.MapGet("/csv/search/datetime/{startDate}/{endDate}", (string startDate, string endDate) =>
 {
-    HandleErrors(() =>
+    return HandleErrors(() =>
     {
-        object res = loader.getDataBetween("11.07.2023 06:05:49.647", "11.07.2023 06:05:54.178");
+        object res = loader.getDataBetween(startDate, endDate);
 
         return new { status = 200, data = new { startDate, value = res } };
     });
