@@ -54,6 +54,15 @@ app.MapGet("/csv/search/datetime/{startDate}/{endDate}", (string startDate, stri
         return new { status = 200, data = new { startDate, value = res } };
     });
 });
+app.MapGet("/csv/search/tests", () =>
+{
+    return HandleErrors(() =>
+    {
+        object res = loader.getAllTestsData();
+
+        return new { status = 200, data = res };
+    });
+});
 
 app.Run();
 
@@ -69,4 +78,24 @@ object HandleErrors(Func<object> method)
     {
         return new { status = 500, data = err.Message }; // Gib die Ausnahme im gew�nschten Format zur�ck
     }
+}
+
+
+int ParseErrorCode(Exception exception)
+{
+    // Standard-HTTP-Fehlercode
+    int errorCode = 500;
+
+    // Hier kannst du verschiedene Arten von Ausnahmen überprüfen und die entsprechenden HTTP-Fehlercodes festlegen
+    if (exception is UnauthorizedAccessException)
+    {
+        errorCode = 401; // Unauthorized
+    }
+    else if (exception is ArgumentException)
+    {
+        errorCode = 400; // Bad Request
+    }
+    // Weitere Ausnahmebehandlungen hier hinzufügen...
+
+    return errorCode;
 }
