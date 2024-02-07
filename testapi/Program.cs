@@ -21,10 +21,24 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API V1");
 });
 
-// Define your API routes
-app.MapGet("/", () => "Hello World!");
+
+
+
+
 
 CsvLoader loader = new CsvLoader("./csv/testdata.csv");
+Helper helper = new Helper();
+
+
+
+
+// Define your API routes
+app.MapGet("/", () => {
+    return HandleErrors(() => 
+    {
+        return helper.SplitList(loader.GetCsvLine(83572));
+    });
+});
 
 app.MapGet("/csv/count", () =>
 {

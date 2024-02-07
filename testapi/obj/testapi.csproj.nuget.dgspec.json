@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\janaj\\source\\repos\\backend-mockup\\testapi\\testapi.csproj": {}
+    "c:\\Users\\janaj\\source\\repos\\backend-mockup\\testapi\\testapi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\janaj\\source\\repos\\backend-mockup\\testapi\\testapi.csproj": {
+    "c:\\Users\\janaj\\source\\repos\\backend-mockup\\testapi\\testapi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\janaj\\source\\repos\\backend-mockup\\testapi\\testapi.csproj",
+        "projectUniqueName": "c:\\Users\\janaj\\source\\repos\\backend-mockup\\testapi\\testapi.csproj",
         "projectName": "testapi",
-        "projectPath": "C:\\Users\\janaj\\source\\repos\\backend-mockup\\testapi\\testapi.csproj",
+        "projectPath": "c:\\Users\\janaj\\source\\repos\\backend-mockup\\testapi\\testapi.csproj",
         "packagesPath": "C:\\Users\\janaj\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\janaj\\source\\repos\\backend-mockup\\testapi\\obj\\",
+        "outputPath": "c:\\Users\\janaj\\source\\repos\\backend-mockup\\testapi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\janaj\\AppData\\Roaming\\NuGet\\NuGet.Config",

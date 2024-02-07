@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "xxRkCJ08bgI+cCnuj0V824wTycJWaCcfvtN4RtyH6zdprpoJi8dW4S9tgIgvwf/HcEs2VCrPm9EbzC26J8znIA==",
+  "dgSpecHash": "2ymOUxszukU8nTP3R8wEhCUGsi10M+yflvJYUPokvq/ahD56LtjYGl8EE/OaLLlWajUAxXFSaEcgNY/Kunp79g==",
   "success": true,
-  "projectFilePath": "C:\\Users\\janaj\\source\\repos\\backend-mockup\\testapi\\testapi.csproj",
+  "projectFilePath": "c:\\Users\\janaj\\source\\repos\\backend-mockup\\testapi\\testapi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\janaj\\.nuget\\packages\\documentformat.openxml\\3.0.1\\documentformat.openxml.3.0.1.nupkg.sha512",
     "C:\\Users\\janaj\\.nuget\\packages\\documentformat.openxml.framework\\3.0.1\\documentformat.openxml.framework.3.0.1.nupkg.sha512",
