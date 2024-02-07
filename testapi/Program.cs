@@ -59,20 +59,26 @@ app.MapGet("/csv/search/substring/{substring}", (string substring) =>
 });
 app.MapGet("/csv/search/datetime/{startDate}/{endDate}", (string startDate, string endDate) =>
 {
-    try
+    HandleErrors(() =>
     {
-        
-        
-        //return new { status = 200, data = new { substring, value = res } };
-    }
-    catch (Exception err)
-    {
-        var res = new List<string>();
+        object res = loader.getDataBetween("11.07.2023 06:05:49.647", "11.07.2023 06:05:54.178");
 
-        res.Add(err.Message);
-
-        return new { status = 500, data = new { substring, value = res } };
-    }
+        return new { status = 200, data = new { startDate, value = res } };
+    });
 });
 
 app.Run();
+
+
+// Handle errors for API Routes
+object HandleErrors(Func<object> method)
+{
+    try
+    {
+        return method(); // Führe die übergebene Aktion aus und gib das Ergebnis zurück
+    }
+    catch (Exception err)
+    {
+        return new { status = 500, data = err.Message }; // Gib die Ausnahme im gewünschten Format zurück
+    }
+}

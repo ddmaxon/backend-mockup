@@ -105,7 +105,7 @@ namespace testapi
             };
         }
 
-        public List<string> getDataBetween(string firstSub, string secondSub)
+        public object getDataBetween(string firstSub, string secondSub)
         {
             List<string> _res = new List<string>();
 
@@ -113,15 +113,34 @@ namespace testapi
 
             foreach (string str in this._csv)
             {
-                if (str.Contains(firstSub))
+
+                if (str.Contains(firstSub) && !isBetween)
                 {
                     _res.Add(str);
                     isBetween = true;
                 }
-            }
-            
 
-            return _res;
+                if (isBetween)
+                {
+                    _res.Add(str);
+                }
+
+                if (str.Contains(secondSub) && isBetween)
+                {
+                    _res.Add(str);
+                    isBetween = false;
+                    break;
+                }
+            }
+
+            return new
+            {
+                startSub = firstSub,
+                endSub = secondSub,
+                isBetween,
+                result = _res,
+                resultCount = _res.Count()
+            };
         }
     }
 }
