@@ -67,7 +67,7 @@ namespace testapi
                 {
 
                     // search subStr in every line
-                    if (str.Contains(subStr))
+                    if (str.ToLower().Contains(subStr.ToLower()))
                     {
                         result.Add(str);
                     }
