@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\vsc\\.net\\testapi\\testapi.csproj": {}
+    "C:\\Users\\janaj\\source\\repos\\backend-mockup\\testapi\\testapi.csproj": {}
   },
   "projects": {
-    "C:\\vsc\\.net\\testapi\\testapi.csproj": {
+    "C:\\Users\\janaj\\source\\repos\\backend-mockup\\testapi\\testapi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\vsc\\.net\\testapi\\testapi.csproj",
+        "projectUniqueName": "C:\\Users\\janaj\\source\\repos\\backend-mockup\\testapi\\testapi.csproj",
         "projectName": "testapi",
-        "projectPath": "C:\\vsc\\.net\\testapi\\testapi.csproj",
-        "packagesPath": "C:\\Users\\levin\\.nuget\\packages\\",
-        "outputPath": "C:\\vsc\\.net\\testapi\\obj\\",
+        "projectPath": "C:\\Users\\janaj\\source\\repos\\backend-mockup\\testapi\\testapi.csproj",
+        "packagesPath": "C:\\Users\\janaj\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\janaj\\source\\repos\\backend-mockup\\testapi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\levin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\janaj\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -68,7 +68,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.402\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
         }
       }
     }

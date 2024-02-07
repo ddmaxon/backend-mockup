@@ -30,38 +30,26 @@ app.MapGet("/csv/count", () =>
 {
     return new { status = 200, data = loader.GetCsvLines().Count() };
 });
-app.MapGet("/csv/search/index/{index}", (int index) =>
+app.MapGet("/csv/search/index/{index}", (int index) => 
 {
-    try
+    return HandleErrors(() =>
     {
         return new { status = 200, data = loader.GetCsvLine(index) };
-    }
-        catch (Exception err)
-    {
-        return new { status = 500, data = err.Message };
-    }
+    });
 });
-app.MapGet("/csv/search/substring/{substring}", (string substring) =>
+app.MapGet("/csv/search/substring/{substring}", (string substring) => 
 {
-    try
+    return HandleErrors(() =>
     {
         var res = loader.searchSubstringInCsv(substring);
         return new { status = 200, data = new { substring, value = res }  };
-    }
-    catch (Exception err)
-    {
-        var res = new List<string>();
-
-        res.Add(err.Message);
-
-        return new { status = 500, data = new { substring, value = res } };
-    }
+    });
 });
 app.MapGet("/csv/search/datetime/{startDate}/{endDate}", (string startDate, string endDate) =>
 {
     HandleErrors(() =>
     {
-        object res = loader.getDataBetween("11.07.2023 06:05:49.647", "11.07.2023 06:05:54.178");
+        object res = loader.getDataBetween("11.07.2023 06:05:49.647", "11.07.2023 06:05:54.178"); 
 
         return new { status = 200, data = new { startDate, value = res } };
     });
@@ -75,10 +63,10 @@ object HandleErrors(Func<object> method)
 {
     try
     {
-        return method(); // Führe die übergebene Aktion aus und gib das Ergebnis zurück
+        return method(); // Fï¿½hre die ï¿½bergebene Aktion aus und gib das Ergebnis zurï¿½ck
     }
     catch (Exception err)
     {
-        return new { status = 500, data = err.Message }; // Gib die Ausnahme im gewünschten Format zurück
+        return new { status = 500, data = err.Message }; // Gib die Ausnahme im gewï¿½nschten Format zurï¿½ck
     }
 }
