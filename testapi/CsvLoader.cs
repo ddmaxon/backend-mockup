@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using SharpCompress.Crypto;
+using System.IO;
 
 
 namespace testapi
@@ -6,10 +7,12 @@ namespace testapi
     public class CsvLoader
     {
         private List<string> _csv;
+        private MongoController storage;
 
         public CsvLoader(string csvPath = "./")
         {
             this._csv = new List<string>();
+            this.storage = new MongoController();
             this.loadCsv(csvPath);
         }
 
@@ -27,6 +30,18 @@ namespace testapi
                     this._csv.Add(val);
                 }
             }
+        }
+
+        public bool checkDBData(string timestamp)
+        {
+            /* var tests = this.storage.Search(new { timestamp });
+
+            if(tests.Count > 0)
+            {
+                return true;
+            }  */          
+
+            return false;
         }
 
         public List<string> GetCsvLines()
@@ -84,7 +99,7 @@ namespace testapi
             {
                 if (err.Message == "422")
                 {
-                    throw new($"No sources found for {subStr}");
+                    throw new DataLengthException($"No sources found for {subStr}");
                 }
 
                 throw new Exception($"Something went wrong! We're working on it.");
@@ -118,41 +133,55 @@ namespace testapi
 
         public object getDataBetween(string firstSub, string secondSub)
         {
-            List<string> _res = new List<string>();
-
-            bool isBetween = false;
-
-            foreach (string str in this._csv)
+            try
             {
+                List<string> _res = new List<string>();
 
-                if (str.ToLower().Contains(firstSub.ToLower()) && !isBetween)
+                bool isBetween = false;
+
+                foreach (string str in this._csv)
                 {
-                    _res.Add(str);
-                    isBetween = true;
+                    Console.WriteLine(str);
+                    if (str.ToLower().Contains(firstSub.ToLower()) && !isBetween)
+                    {
+                        isBetween = true;
+                    }
+
+                    if (isBetween)
+                    {
+                        _res.Add(str);
+                    }
+
+                    if (str.ToLower().Contains(secondSub.ToLower()) && isBetween)
+                    {
+                        break;
+                    }
                 }
 
-                if (isBetween)
+                if (_res.Count <= 0)
                 {
-                    _res.Add(str);
+                    throw new DataLengthException("422");
                 }
 
-                if (str.ToLower().Contains(secondSub.ToLower()) && isBetween)
+                return new
                 {
-                    _res.Add(str);
-                    break;
-                }
+                    start = new { firstSub, index = getIndexOfSearch(firstSub) },
+                    endSub = new { secondSub, index = getIndexOfSearch(secondSub) },
+                    isBetween,
+                    result = _res,
+                    resultCount = _res.Count()
+                };
             }
-
-            return new
+            catch (Exception err)
             {
-                start = new { firstSub, index = getIndexOfSearch(firstSub) },
-                endSub = new { secondSub, index = getIndexOfSearch(secondSub) },
-                isBetween,
-                result = _res,
-                resultCount = _res.Count()
-            };
-        }
+                if(err.Message == "422")
+                {
+                    throw new DataLengthException("No srcs found!");
+                }
 
+                throw new Exception(err.Message);
+            }
+        }
 
         public object getAllTestsData()
         {
@@ -165,37 +194,31 @@ namespace testapi
             bool isBetween = false;
 
 
-            foreach (string str in this._csv)
+            if (!this.checkDBData(this._csv[0]))
             {
-
-                if (str.ToLower().Contains(_testdata_startStr.ToLower()) && !isBetween)
+                foreach (string str in this._csv)
                 {
-                    isBetween = true;
-                    _temp = new List<object>();
 
-                    dynamic item = this.getIndexOfSearch(str);
+                    if (str.ToLower().Contains(_testdata_startStr.ToLower()) && !isBetween)
+                    {
+                        isBetween = true;
+                        _temp = new List<object>();
+                    }
 
-                    _temp.Add(new { indexOf = item.indexOf, data = item.subStr });
-                }
+                    if (isBetween)
+                    {
+                        dynamic item = this.getIndexOfSearch(str);
+                        _temp.Add(new { indexOf = item.indexOf, data = item.subStr });
+                    }
 
-                if (isBetween)
-                {
-                    dynamic item = this.getIndexOfSearch(str);
-                    _temp.Add(new { indexOf = item.indexOf, data = item.subStr });
-                }
-
-                if (str.ToLower().Contains(_testdata_endStr.ToLower()) && isBetween)
-                {
-                    isBetween = false; 
-                    
-                    dynamic item = this.getIndexOfSearch(str);
-                    _temp.Add(new { indexOf = item.indexOf, data = item.subStr });
-
-                    _res.Add(_temp);
+                    if (str.ToLower().Contains(_testdata_endStr.ToLower()) && isBetween)
+                    {
+                        isBetween = false;
+                        _res.Add(_temp);
+                    }
                 }
             }
-
-
+            
             return new
             {
                 data = _res,

@@ -2,6 +2,9 @@ using testapi;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Hosting;
+using System.Reflection.PortableExecutable;
+using SharpCompress.Crypto;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,24 +24,10 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API V1");
 });
 
-
-
-
-
+// Define your API routes
+app.MapGet("/", () => "Hello World!");
 
 CsvLoader loader = new CsvLoader("./csv/testdata.csv");
-Helper helper = new Helper();
-
-
-
-
-// Define your API routes
-app.MapGet("/", () => {
-    return HandleErrors(() => 
-    {
-        return helper.SplitList(loader.GetCsvLine(83572));
-    });
-});
 
 app.MapGet("/csv/count", () =>
 {
@@ -63,6 +52,8 @@ app.MapGet("/csv/search/datetime/{startDate}/{endDate}", (string startDate, stri
 {
     return HandleErrors(() =>
     {
+        Console.WriteLine(startDate);
+        Console.WriteLine(endDate);
         object res = loader.getDataBetween(startDate, endDate);
 
         return new { status = 200, data = new { startDate, value = res } };
@@ -90,7 +81,7 @@ object HandleErrors(Func<object> method)
     }
     catch (Exception err)
     {
-        return new { status = 500, data = err.Message }; // Gib die Ausnahme im gew�nschten Format zur�ck
+        return new { status = ParseErrorCode(err), data = new { Message = err.Message, Data = err.Data } }; // Gib die Ausnahme im gew�nschten Format zur�ck
     }
 }
 
@@ -109,7 +100,36 @@ int ParseErrorCode(Exception exception)
     {
         errorCode = 400; // Bad Request
     }
-    // Weitere Ausnahmebehandlungen hier hinzufügen...
+    else if (exception is FileNotFoundException)
+    {
+        errorCode = 404; // Not Found
+    }
+    else if (exception is NotSupportedException)
+    {
+        errorCode = 405; // Method Not Allowed
+    }
+    else if (exception is NotImplementedException)
+    {
+        errorCode = 501; // Not Implemented
+    }
+    else if (exception is TimeoutException)
+    {
+        errorCode = 408; // Request Timeout
+    }
+    else if (exception is DataLengthException)
+    {
+        errorCode = 404;
+    }
+    else if (exception is IndexOutOfRangeException)
+    {
+        errorCode = 400;
+    }
+    // Weitere Ausnahmen können hier hinzugefügt werden...
+    else
+    {
+        errorCode = 500; // Internal Server Error
+    }
+
 
     return errorCode;
 }
