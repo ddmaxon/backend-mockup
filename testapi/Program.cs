@@ -24,14 +24,32 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API V1");
 });
 
-// Define your API routes
-app.MapGet("/", () => "Hello World!");
+
+
+
 
 CsvLoader loader = new CsvLoader("./csv/testdata.csv");
+Helper helper = new Helper();
+
+
+
+
+
+// Define your API routes
+app.MapGet("/", () =>
+{
+    return HandleErrors(() =>
+    {
+        return new { status = 200, data = helper.GetExecutionTime(loader.GetCsvLine(83572)) };
+    });
+});
 
 app.MapGet("/csv/count", () =>
 {
-    return new { status = 200, data = loader.GetCsvLines().Count() };
+    return HandleErrors(() =>
+    {
+        return new { status = 200, data = loader.GetCsvLines().Count() };
+    });
 });
 app.MapGet("/csv/search/index/{index}", (int index) => 
 {
@@ -68,8 +86,26 @@ app.MapGet("/csv/search/tests", () =>
         return new { status = 200, data = res };
     });
 });
+app.MapGet("/csv/avarage/executiontime", () => 
+{
+    return HandleErrors(() => 
+    {
+        dynamic res = helper.GetExecutionTime(loader.GetCsvLines());
+
+        return new { status = 200, data = res };
+    });
+});
+
 
 app.Run();
+
+
+
+
+
+
+
+
 
 
 // Handle errors for API Routes
@@ -85,7 +121,7 @@ object HandleErrors(Func<object> method)
     }
 }
 
-
+// Parse every Exception into a http error code
 int ParseErrorCode(Exception exception)
 {
     // Standard-HTTP-Fehlercode
